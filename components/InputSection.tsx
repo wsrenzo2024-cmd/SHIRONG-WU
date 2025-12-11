@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GenerationSettings, GenerationStatus, ScriptRow } from '../types';
-import { Sparkles, Play, Settings2, Plus, Trash2, Clock, AlignLeft, ListOrdered, Save, Eraser } from 'lucide-react';
+import { Sparkles, Play, Settings2, Plus, Trash2, Clock, AlignLeft, ListOrdered, Save } from 'lucide-react';
 
 interface InputSectionProps {
   onGenerate: (script: string, settings: GenerationSettings) => void;
@@ -97,28 +97,6 @@ const InputSection: React.FC<InputSectionProps> = ({
     }
   };
 
-  const handleClearScript = (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      // Check if it's already empty (and settings are default) to avoid unnecessary confirm
-      const isScriptEmpty = rows.length === 1 && !rows[0].content.trim() && !rows[0].timestamp.trim();
-      const isSettingsDefault = 
-          settings.artStyle === DEFAULT_SETTINGS.artStyle && 
-          settings.aspectRatio === DEFAULT_SETTINGS.aspectRatio &&
-          settings.defaultImageCount === DEFAULT_SETTINGS.defaultImageCount;
-
-      if (isScriptEmpty && isSettingsDefault) return;
-
-      if (window.confirm("Are you sure you want to clear the script and reset settings? This cannot be undone.")) {
-          // Generate a highly unique ID to ensure React fully re-renders the row component
-          const newId = `reset-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-          setRows([{ id: newId, timestamp: '00:00', content: '', duration: '' }]);
-          setTotalRowsInput("1");
-          setSettings(DEFAULT_SETTINGS);
-      }
-  };
-
   const updateRow = (id: string, field: keyof ScriptRow, value: string) => {
     setRows(rows.map(row => row.id === id ? { ...row, [field]: value } : row));
   };
@@ -195,17 +173,6 @@ const InputSection: React.FC<InputSectionProps> = ({
           </h2>
 
           <div className="flex items-center gap-3">
-             <button
-                type="button"
-                onClick={handleClearScript}
-                disabled={isGenerating}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-lg transition-colors border border-red-200 dark:border-red-800 cursor-pointer"
-                title="Clear script and reset settings"
-             >
-                <Eraser className="w-4 h-4" />
-                Clear Script
-             </button>
-
              <button
                 type="button"
                 onClick={onSave}
