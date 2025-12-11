@@ -1,5 +1,5 @@
 {
-  "name": "Script to Prompt",
+  "name": "Script to Prompt Vision AI",
   "description": "Transforms video scripts into professional Text-to-Image and Image-to-Video prompts with AI-powered visual reasoning.",
   "requestFramePermissions": []
 }
